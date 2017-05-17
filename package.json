@@ -1,0 +1,25 @@
+{
+  "name": "gameon",
+  "version": "1.0.0",
+  "description": "-",
+  "main": "index.js",
+  "scripts": {
+    "test": "-"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoieOnn/gameon-server.git"
+  },
+  "keywords": [
+    "-"
+  ],
+  "author": "Roie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RoieOnn/gameon-server/issues"
+  },
+  "homepage": "https://github.com/RoieOnn/gameon-server#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
