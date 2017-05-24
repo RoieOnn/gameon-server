@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "-",
   "main": "index.js",
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RoieOnn/gameon-server.git"
@@ -18,10 +17,11 @@
   },
   "homepage": "https://github.com/RoieOnn/gameon-server#readme",
   "dependencies": {
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "mongodb": "^2.2.27"
   },
   "scripts": {
-  "test": "make test",
-  "start": "node gameon.js"
+    "test": "make test",
+    "start": "node gameon.js"
   }
 }
