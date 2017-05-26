@@ -60,7 +60,7 @@ app.get("/", function(req, res){
 app.get("/updateUser", function(req, res){
 	// console.log(req.body, res);
 	console.log(req.query);
-	// saveUser(req.query.id, req.query.lon, req.query.lat);
+	saveUser(req.query.id, req.query.lon, req.query.lat);
 	res.send("updated");
 	res.end();
 });
