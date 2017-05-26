@@ -17,6 +17,7 @@ function saveUser(id, lon, lat){
    collection.insertMany([
       {username: id, longitude:lon, latitude:lat}
    ], (err, results) => {
+   			console.log(err, results);
           db.close();
           if (err) {
               console.error(err);
@@ -27,6 +28,27 @@ function saveUser(id, lon, lat){
 });
 }
 
+function userMatch(sport, lvl, clock){
+	MongoClient.connect(MONGO_URL, (err, db) => {
+    if (err) {
+        console.error(err);
+
+        return;
+    }
+   let collection = db.collection('users');
+   collection.insertMany([
+      {sport:type, level:lvl, time:clock}
+   ], (err, results) => {
+          db.close();
+          if (err) {
+              console.error(err);
+              return;
+            }
+          console.log(`Completed successfully, inserted ${results.insertedCount} documents`);
+      });
+	});
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 
 app.get("/", function(req, res){
@@ -34,7 +56,6 @@ app.get("/", function(req, res){
 	res.send("Hello");
 	res.end();
 });
-
 
 app.get("/updateUser", function(req, res){
 	// console.log(req.body, res);
