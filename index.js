@@ -7,7 +7,7 @@ const port = process.env.PORT || 8080;
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-function updateUser(id, lon, lat){
+function saveUser(id, lon, lat){
 	MongoClient.connect(MONGO_URL, (err, db) => {
     if (err) {
         console.error(err);
@@ -39,7 +39,7 @@ app.get("/", function(req, res){
 app.get("/updateUser", function(req, res){
 	// console.log(req.body, res);
 	console.log(req.query.id);
-	updateUser(req.query.id, req.query.lon, req.query.lat);
+	// saveUser(req.query.id, req.query.lon, req.query.lat);
 	res.send("updated");
 	res.end();
 });
