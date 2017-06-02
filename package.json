@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/RoieOnn/gameon-server#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.2",
     "mongodb": "^2.2.27"
   },
