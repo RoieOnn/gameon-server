@@ -8,8 +8,10 @@ const port = process.env.PORT || 8080;
 app.use(bodyParser.json());
 
 //////////////////////////////////////////////////////////////////////////////////////
+
+// Save users in DB
 	
-function saveUser(id, sport, lvl, lon, lat){
+function saveUser(id, sport, lvl, lon, lat, opp, ready){
 	MongoClient.connect(MONGO_URL, (err, db) => {
     if (err) {
         console.error(err);
@@ -17,7 +19,7 @@ function saveUser(id, sport, lvl, lon, lat){
     }
    let collection = db.collection('users');
    collection.insertMany([
-      {username: id, sport: sport, level: lvl, longitude:lon, latitude:lat}
+      {username: id, sport: sport, level: lvl, longitude: lon, latitude: lat, opponent: opp, readyToPlay: ready}
    ], (err, results) => {
    			console.log(err, results);
           db.close();
@@ -25,10 +27,37 @@ function saveUser(id, sport, lvl, lon, lat){
               console.error(err);
               return;
             }
-          console.log(`Completed successfully, inserted ${results.insertedCount} documents`);
       });
 });
 }
+
+app.get("/updateUser", function(req, res){
+	console.log(req.query);
+	saveUser(req.query.id, req.query.sport, req.query.lvl, req.query.lon, req.query.lat, req.query.opp, req.query.ready);
+	res.send("updated");
+	res.end();
+});
+
+app.post('/updateUser', (req, res) => {
+    let username = req.body.username || DEFAULT_USERNAME;
+    let sport = req.body.sport || DEFAULY_SPORT;
+    let level = req.body.level || DEFAULT_LEVEL;
+    let longitude = req.body.longitude || DEFAULT_LONGITUDE;
+    let latitude = req.body.latitude || DEFAULT_LATITUDE;
+    let opponent = req.body.opponent || DEFAULT_OPPONENT;
+    let readyToPlay = req.body.readyToPlay || DEFAULT_READYTOPLAY;
+	
+	saveUser(username, sport, level, longitude, latitude, opponent, readyToPlay);
+
+	res.send(JSON.stringify(req.body));
+	res.end();
+});
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// Find opponent based on DB
+
 function findOpponent(sport, lvl, clock, cb){
 	MongoClient.connect(MONGO_URL, (err, db) => {
 	    if (err) {
@@ -69,21 +98,12 @@ function ready(sport, lvl, clock){
 	});
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-
-app.get("/", function(req, res){
-	console.log(req, res);
-	res.send("Hello");
-	res.end();
-});
-
 app.get("/findOpponent", function(req, res){
 	findOpponent(req.query.sport, req.query.lvl, req.query.clock, (err, result) => {
 		if (err) return res.status(500).json({err: err.message});
         return res.json(result);
     });	
 });
-
 
 app.post("/findOpponent", function(req, res){
 	console.log(req.query);
@@ -92,23 +112,11 @@ app.post("/findOpponent", function(req, res){
 	res.end();
 });
 
-app.get("/updateUser", function(req, res){
-	console.log(req.query);
-	saveUser(req.query.id, req.query.sport, req.query.lvl, req.query.lon, req.query.lat);
-	res.send("updated");
-	res.end();
-});
+/////////////////////////////////////////////////////////////////////////////////////
 
-app.post('/updateUser', (req, res) => {
-    let username = req.body.username || DEFAULT_USERNAME;
-    let sport = req.body.sport || DEFAULY_SPORT;
-    let level = req.body.level || DEFAULT_LEVEL;
-    let longitude = req.body.longitude || DEFAULT_LONGITUDE;
-    let latitude = req.body.latitude || DEFAULT_LATITUDE;
-	
-	saveUser(username, sport, level, longitude, latitude);
-
-	res.send(JSON.stringify(req.body));
+app.get("/", function(req, res){
+	console.log(req, res);
+	res.send("Hello");
 	res.end();
 });
 
