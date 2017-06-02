@@ -61,7 +61,7 @@ app.get("/userMatch", function(req, res){
 	userMatch(req.query.sport, req.query.lvl, req.query.clock);
 	res.send("looking for match");
 	res.end();
-}
+});
 
 app.get("/updateUser", function(req, res){
 	// console.log(req.body, res);
