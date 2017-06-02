@@ -27,7 +27,6 @@ function saveUser(id, lon, lat){
       });
 });
 }
-
 function userMatch(sport, lvl, clock){
 	MongoClient.connect(MONGO_URL, (err, db) => {
     if (err) {
@@ -57,12 +56,29 @@ app.get("/", function(req, res){
 	res.end();
 });
 
+app.get("/userMatch", function(req, res){
+	console.log(req.query);
+	userMatch(req.query.sport, req.query.lvl, req.query.clock);
+	res.send("looking for match");
+	res.end();
+}
+
 app.get("/updateUser", function(req, res){
 	// console.log(req.body, res);
 	console.log(req.query);
 	saveUser(req.query.id, req.query.lon, req.query.lat);
 	res.send("updated");
 	res.end();
+});
+
+app.post('/updateUser', (req, res) => {
+    console.dir(req.body);
+    let username = req.body.username || DEFAULT_USERNAME;
+    let longitude = req.body.longitude || DEFAULT_LONGITUDE;
+    let latitude = req.body.latitude || DEFAULT_LATITUDE;
+    console.log("Got POST request to /updateUser, using username=" + username + 
+    										   ", longitude=" + longitude + 
+    										   ", latitude=" + latitude);
 });
 
 app.listen(port);
