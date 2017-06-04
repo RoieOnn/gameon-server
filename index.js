@@ -25,8 +25,7 @@ function saveUser(id, sport, lvl, lon, lat, opp, ready){
           db.close();
           if (err) {
               console.error(err);
-              return;
-            }
+              return;          }
       });
 });
 }
@@ -118,6 +117,44 @@ app.get("/", function(req, res){
 	console.log(req, res);
 	res.send("Hello");
 	res.end();
+});
+
+// Create new user
+app.post('/users', function(req, res){
+  const username = req.body.username;
+  const sport = req.body.sport;
+  const level = req.body.level;
+  const longitude = req.body.longitude;
+  const latitude = req.body.latitude;
+  const opponent = req.body.opponent;
+  const readyToPlay = req.body.readyToPlay;
+  
+  const toInsert = {
+    "username": username,
+    "sport": sport,
+    "level": level,
+    "longitude": longitude,
+    "latitude": latitude,
+    "opponent": opponent,
+    "readyToPlay": readyToPlay
+  };
+
+  MongoClient.connect(MONGO_URL, (err, db) =>{
+    if(err){
+      console.error(err);
+      return;
+    }
+    const collection = db.collection('users');
+    collection.insertOne(toInsert, (e ,results) => {
+      db.close();
+      if (e) {
+        console.error(e);
+        return;
+      }
+      const jsonStr = `{ "id" :  ${results.insertedId} }`;
+      res.send(jsonStr).end();
+    });
+  })
 });
 
 console.log(port);
