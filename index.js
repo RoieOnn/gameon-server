@@ -121,22 +121,22 @@ app.get("/", function(req, res){
 
 // Create new user
 app.post('/users', function(req, res){
-  const username = req.body.username;
+  //const username = req.body.username;
   const sport = req.body.sport;
   const level = req.body.level;
-  const longitude = req.body.longitude;
-  const latitude = req.body.latitude;
-  const opponent = req.body.opponent;
-  const readyToPlay = req.body.readyToPlay;
+  //const longitude = req.body.longitude;
+  //const latitude = req.body.latitude;
+  //const opponent = req.body.opponent;
+  //const readyToPlay = req.body.readyToPlay;
   
   const toInsert = {
-    "username": username,
+    //"username": username,
     "sport": sport,
-    "level": level,
-    "longitude": longitude,
-    "latitude": latitude,
-    "opponent": opponent,
-    "readyToPlay": readyToPlay
+    "level": level//,
+    //"longitude": longitude,
+    //"latitude": latitude,
+    //"opponent": opponent,
+    //"readyToPlay": readyToPlay
   };
 
   MongoClient.connect(MONGO_URL, (err, db) =>{
