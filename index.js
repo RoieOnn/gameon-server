@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 // Save users in DB
 	
-function saveUser(id, sport, lvl, lon, lat, opp, ready){
+function saveUser(id, sport, level, lon, lat, opp, ready){
 	MongoClient.connect(MONGO_URL, (err, db) => {
     if (err) {
         console.error(err);
@@ -19,7 +19,7 @@ function saveUser(id, sport, lvl, lon, lat, opp, ready){
     }
    let collection = db.collection('users');
    collection.insertMany([
-      {username: id, sport: sport, level: lvl, longitude: lon, latitude: lat, opponent: opp, readyToPlay: ready}
+      {username: id, sport: sport, level: level, longitude: lon, latitude: lat, opponent: opp, readyToPlay: ready}
    ], (err, results) => {
    			console.log(err, results);
           db.close();
@@ -32,7 +32,7 @@ function saveUser(id, sport, lvl, lon, lat, opp, ready){
 
 app.get("/updateUser", function(req, res){
 	console.log(req.query);
-	saveUser(req.query.id, req.query.sport, req.query.lvl, req.query.lon, req.query.lat, req.query.opp, req.query.ready);
+	saveUser(req.query.id, req.query.sport, req.query.level, req.query.lon, req.query.lat, req.query.opp, req.query.ready);
 	res.send("updated");
 	res.end();
 });
@@ -57,7 +57,7 @@ app.post('/updateUser', (req, res) => {
 
 // Find opponent based on DB
 
-function findOpponent(sport, lvl, clock, cb){
+function findOpponent(sport, level, clock, cb){
 	MongoClient.connect(MONGO_URL, (err, db) => {
 	    if (err) {
 	        console.error(err);
@@ -66,7 +66,7 @@ function findOpponent(sport, lvl, clock, cb){
 	   }
 
 	   let collection = db.collection('users');
-	   collection.find({sport: sport, lvl: parseInt(lvl)}).toArray((err, result) => {
+	   collection.find({sport: sport, level: parseInt(level)}).toArray((err, result) => {
 	   		if (err) {
 	   			console.error(err);
 	   		}
@@ -76,7 +76,7 @@ function findOpponent(sport, lvl, clock, cb){
    	});
 }
 
-function ready(sport, lvl, clock){
+function ready(sport, level, clock){
 	MongoClient.connect(MONGO_URL, (err, db) => {
     if (err) {
         console.error(err);
@@ -85,7 +85,7 @@ function ready(sport, lvl, clock){
     }
    let collection = db.collection('users');
    collection.insertMany([
-      {sport:type, level:lvl, time:clock}
+      {sport:type, level:level, time:clock}
    ], (err, results) => {
           db.close();
           if (err) {
@@ -98,7 +98,7 @@ function ready(sport, lvl, clock){
 }
 
 app.get("/findOpponent", function(req, res){
-	findOpponent(req.query.sport, req.query.lvl, req.query.clock, (err, result) => {
+	findOpponent(req.query.sport, req.query.level, req.query.clock, (err, result) => {
 		if (err) return res.status(500).json({err: err.message});
         return res.json(result);
     });	
@@ -106,7 +106,7 @@ app.get("/findOpponent", function(req, res){
 
 app.post("/findOpponent", function(req, res){
 	console.log(req.query);
-	userMatch(req.query.sport, req.query.lvl, req.query.clock);
+	userMatch(req.query.sport, req.query.level, req.query.clock);
 	res.send("Ready");
 	res.end();
 });
@@ -167,7 +167,7 @@ app.get('/users' , function(req ,res){
       return;
     }
     const collection = db.collection('users');
-    collection.find({sport: sport, lvl: parseInt(lvl)}).toArray((err, result) =>{
+    collection.find({sport: sport, level: parseInt(level)}).toArray((err, result) =>{
       db.close();
       if(e){
         console.error(e);
