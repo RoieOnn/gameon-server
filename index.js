@@ -101,7 +101,7 @@ app.get("/findOpponent", function(req, res){
 	findOpponent(req.query.sport, req.query.level, req.query.clock, (err, result) => {
 		if (err) return res.status(500).json({err: err.message});
         //return res.json(result);
-        const jsonStr = '{ "opponent" : ' + JSON.stringify(results) + '}';
+        const jsonStr = '{ "opponent" : ' + JSON.stringify(result) + '}';
         const obj = JSON.parse(jsonStr);
         return obj;
         //res.send(obj).end();
