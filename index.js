@@ -103,8 +103,8 @@ app.get("/findOpponent", function(req, res){
         //return res.json(result);
         const jsonStr = '{ "opponent" : ' + JSON.stringify(result) + '}';
         const obj = JSON.parse(jsonStr);
-        return obj;
-        //res.send(obj).end();
+        //return obj;
+        res.send(obj).end();
     });	
 });
 
