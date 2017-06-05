@@ -157,5 +157,31 @@ app.post('/users', function(req, res){
   })
 });
 
+
+// Get users for main view
+
+app.get('/users' , function(req ,res){
+  MongoClient.connect(MONGO_URL, (err, db) =>{
+    if(err){
+      console.error(err);
+      return;
+    }
+    const collection = db.collection('users');
+    collection.find({sport: sport, lvl: parseInt(lvl)}).toArray((err, result) =>{
+      db.close();
+      if(e){
+        console.error(e);
+        return;
+      }
+      console.log(`Found ${results.legth} records that match the query.`);
+      results.forEach(doc => console.log(`Doc title found - ${doc.title}`));
+      const jsonStr = '{ "vol" : ' + JSON.stringify(results) + '}';
+      const obj = JSON.parse(jsonStr);
+      res.send(obj).end();
+    });
+  })
+
+});
+
 console.log(port);
 app.listen(port);
