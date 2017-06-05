@@ -100,7 +100,10 @@ function ready(sport, level, clock){
 app.get("/findOpponent", function(req, res){
 	findOpponent(req.query.sport, req.query.level, req.query.clock, (err, result) => {
 		if (err) return res.status(500).json({err: err.message});
-        return res.json(result);
+        //return res.json(result);
+        const jsonStr = '{ "opponent" : ' + JSON.stringify(results) + '}';
+        const obj = JSON.parse(jsonStr);
+        res.send(obj).end();
     });	
 });
 
