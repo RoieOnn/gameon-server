@@ -65,8 +65,8 @@ function findOpponent(sport, level, clock, cb){
 	        return;
 	   }
 
-	   let collection = db.collection('users');
-	   collection.find({sport: sport, level: parseInt(level)}).toArray((err, result) => {
+	   let collection = db.collection('games');
+	   collection.find({sport: sport}).toArray((err, result) => { // , level: parseInt(level)
 	   		if (err) {
 	   			console.error(err);
 	   		}
@@ -110,8 +110,44 @@ app.get("/findOpponent", function(req, res){
 
 app.post("/findOpponent", function(req, res){
 	console.log(req.query);
-	userMatch(req.query.sport, req.query.level, req.query.clock);
-	res.send("Ready");
+	// userMatch(req.query.sport, req.query.level, req.query.clock);
+	const username = req.body.username;
+  const sport = req.body.sport;
+  // const level = req.body.level;
+ 
+  //const longitude = req.body.longitude;
+  //const latitude = req.body.latitude;
+  //const opponent = req.body.opponent;
+  //const readyToPlay = req.body.readyToPlay;
+  
+  const toInsert = {
+    "username": username,
+    "sport": sport,
+    //"level": level//,
+    //"longitude": longitude,
+    //"latitude": latitude,
+    //"opponent": opponent,
+    //"readyToPlay": readyToPlay
+  };
+
+  MongoClient.connect(MONGO_URL, (err, db) =>{
+    if(err){
+      console.error(err);
+      return;
+    }
+    const collection = db.collection('games');
+    collection.insertOne(toInsert, (e ,results) => {
+      db.close();
+      if (e) {
+        console.error(e);
+        return;
+      }
+      const jsonStr = `{ "id" :  ${results.insertedId} }`;
+      res.send(jsonStr).end();
+    });
+  })
+
+  res.send("Ready");
 	res.end();
 });
 
